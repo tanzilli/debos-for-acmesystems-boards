@@ -17,7 +17,7 @@
 
 	chosen {
 		stdout-path = "serial0:115200n8";
-		bootargs = "mem=256M console=ttyS0,115200 root=/dev/mmcblk0p2 rootfstype=ext4 rw rootwait consoleblank=0";
+		bootargs = "mem=256M console=ttyS0,115200 root=/dev/mmcblk0p2 rootfstype=ext4 rw rootwait net.ifnames=0";
 	};
 
 	memory {
@@ -272,7 +272,7 @@
 		};
 
         usb0: gadget@500000 {
-            status = "okay";
+            status = "disabled";
         };
 
         usb1: ohci@600000 {

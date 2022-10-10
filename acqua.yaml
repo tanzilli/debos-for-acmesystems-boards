@@ -15,6 +15,7 @@ actions:
     suite: {{ $suite }}
     components:
       - main
+      - non-free
     mirror: http://cdn.debian.net/debian/
     variant: minbase
 
@@ -25,7 +26,8 @@ actions:
         iputils-ping, udhcpc, netbase, net-tools, ethtool, openssh-server,
         lsb-release, locales, dialog, file, usbutils, nano, less, tree,
         rsync, curl, wget, zip, unzip, ntp, i2c-tools, gpiod, 
-        cloud-guest-utils, ca-certificates, fdisk, python3-libgpiod 
+        cloud-guest-utils, ca-certificates, fdisk, python3-libgpiod,
+        wpasupplicant, iw, firmware-misc-nonfree 
     ]
 
   - action: run
