@@ -1,0 +1,87 @@
+{{- $arch     := or .arch     "armel" -}}
+{{- $suite    := or .suite    "buster" -}}
+{{- $board    := or .board    "foxg20" -}}
+{{- $locale   := or .locale   "en_US" -}}
+{{- $user     := or .user     "acme" -}}
+{{- $pass     := or .pass     "acmesystems" -}}
+{{- $hostname := or .hostname (printf "%s" $board) -}}
+{{- $image    := or .image    (printf "debian-%s-%s.img" $suite $board) -}}
+
+architecture: {{ $arch }}
+
+actions:
+  - action: debootstrap
+    description: Create Buster Debian filesystem for Fox G20
+    suite: {{ $suite }}
+    components:
+      - main
+    mirror: http://cdn.debian.net/debian/
+    variant: minbase
+
+  - action: apt
+    description: add extra packages
+    packages: [
+        kmod, sudo, adduser, systemd-sysv, udev, dnsutils, ifupdown, iproute2,
+        iputils-ping, udhcpc, netbase, net-tools, ethtool, openssh-server,
+        lsb-release, locales, dialog, file, usbutils, nano, less, tree,
+        vim-tiny, screen, rsync, curl, wget, zip, unzip, cloud-guest-utils
+    ]
+
+  - action: run
+    description: cleanup packages after install
+    chroot: true
+    command: apt clean
+
+  - action: run
+    description: set hostname
+    chroot: true
+    command: echo {{ $hostname }} > /etc/hostname
+
+  - action: run
+    description: set hosts file
+    chroot: true
+    script: scripts/setup-hosts.sh {{ $hostname }}
+
+  - action: run
+    description: set default locale
+    chroot: true
+    script: scripts/setup-locale.sh {{ $locale }}
+
+  - action: run
+    description: add a new user (will be in sudoers)
+    chroot: true
+    script: scripts/setup-user.sh {{ $user }} "{{ $pass }}"
+
+  - action: overlay
+    description: Static files to add to the rootfs
+    source: overlays/{{ $board }}/
+
+  - action: image-partition
+    description: create a partitioned image
+    imagename: {{ $image }}
+    imagesize: 1GB
+    partitiontype: msdos
+    mountpoints:
+      - mountpoint: /
+        partition: rootfs
+        options: [ noatime ]
+      - mountpoint: /boot
+        partition: boot
+    partitions:
+      - name: boot
+        fs: fat32
+        start: 0%
+        end: 100MB
+        flags: [ boot ]
+      - name: rootfs
+        fs: ext4
+        start: 100MB
+        end: 100%
+
+  - action: filesystem-deploy
+    description: deploying filesystem onto image
+
+  - action: run
+    description: compress the image
+    postprocess: true
+    command: xz -f {{ $image }}
