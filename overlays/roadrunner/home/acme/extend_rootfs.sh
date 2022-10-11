@@ -1,4 +1,4 @@
 #!/bin/sh
 
-growpart /dev/mmcblk0 2
-/sbin/resize2fs /dev/mmcblk0p2
+sudo growpart /dev/mmcblk0 2
+sudo resize2fs /dev/mmcblk0p2

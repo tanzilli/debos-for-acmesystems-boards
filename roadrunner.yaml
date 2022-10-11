@@ -11,10 +11,11 @@ architecture: {{ $arch }}
 
 actions:
   - action: debootstrap
-    description: Create Bullseye Debian filesystem for Roadrunner
+    description: Create {{ $suite }} Debian filesystem for {{ $board }}
     suite: {{ $suite }}
     components:
       - main
+      - non-free
     mirror: http://cdn.debian.net/debian/
     variant: minbase
 
@@ -24,8 +25,9 @@ actions:
         kmod, sudo, adduser, systemd-sysv, udev, dnsutils, ifupdown, iproute2,
         iputils-ping, udhcpc, netbase, net-tools, ethtool, openssh-server,
         lsb-release, locales, dialog, file, usbutils, nano, less, tree,
-        vim-tiny, screen, rsync, curl, wget, zip, unzip, cloud-guest-utils, 
-        ca-certificates, fdisk, gpiod, python3-libgpiod 
+        rsync, curl, wget, zip, unzip, ntp, i2c-tools, gpiod, 
+        cloud-guest-utils, ca-certificates, fdisk, python3-libgpiod,
+        wpasupplicant, iw, firmware-misc-nonfree 
     ]
 
   - action: run
