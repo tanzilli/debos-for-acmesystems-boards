@@ -1,5 +1,5 @@
 {{- $arch     := or .arch     "armel" -}}
-{{- $suite    := or .suite    "buster" -}}
+{{- $suite    := or .suite    "bullseye" -}}
 {{- $board    := or .board    "aria" -}}
 {{- $locale   := or .locale   "en_US" -}}
 {{- $user     := or .user     "acme" -}}
@@ -11,10 +11,11 @@ architecture: {{ $arch }}
 
 actions:
   - action: debootstrap
-    description: Create Buster Debian filesystem for Aria
+    description: Create {{ $suite }} Debian filesystem for {{ $board }}
     suite: {{ $suite }}
     components:
       - main
+      - non-free
     mirror: http://cdn.debian.net/debian/
     variant: minbase
 
@@ -24,7 +25,9 @@ actions:
         kmod, sudo, adduser, systemd-sysv, udev, dnsutils, ifupdown, iproute2,
         iputils-ping, udhcpc, netbase, net-tools, ethtool, openssh-server,
         lsb-release, locales, dialog, file, usbutils, nano, less, tree,
-        vim-tiny, screen, rsync, curl, wget, zip, unzip, cloud-guest-utils
+        rsync, curl, wget, zip, unzip, ntp, i2c-tools, gpiod, 
+        cloud-guest-utils, ca-certificates, fdisk, python3-libgpiod,
+        wpasupplicant, iw, firmware-misc-nonfree 
     ]
 
   - action: run

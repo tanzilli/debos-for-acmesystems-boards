@@ -1,5 +1,5 @@
 {{- $arch     := or .arch     "armel" -}}
-{{- $suite    := or .suite    "buster" -}}
+{{- $suite    := or .suite    "bullseye" -}}
 {{- $board    := or .board    "arietta" -}}
 {{- $locale   := or .locale   "en_US" -}}
 {{- $user     := or .user     "acme" -}}
@@ -11,7 +11,7 @@ architecture: {{ $arch }}
 
 actions:
   - action: debootstrap
-    description: Create Buster Debian filesystem for Arietta
+    description: Create {{ $suite }} Debian filesystem for {{ $board }}
     suite: {{ $suite }}
     components:
       - main
@@ -25,8 +25,9 @@ actions:
         kmod, sudo, adduser, systemd-sysv, udev, dnsutils, ifupdown, iproute2,
         iputils-ping, udhcpc, netbase, net-tools, ethtool, openssh-server,
         lsb-release, locales, dialog, file, usbutils, nano, less, tree,
-        vim-tiny, screen, rsync, curl, wget, zip, unzip, cloud-guest-utils,
-        firmware-ralink, wpasupplicant 
+        rsync, curl, wget, zip, unzip, ntp, i2c-tools, gpiod, 
+        cloud-guest-utils, ca-certificates, fdisk, python3-libgpiod,
+        wpasupplicant, iw, firmware-misc-nonfree 
     ]
 
   - action: run

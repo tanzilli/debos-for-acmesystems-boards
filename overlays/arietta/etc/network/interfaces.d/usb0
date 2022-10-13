@@ -1,6 +1,6 @@
 auto usb0
 iface usb0 inet static
     metric 1000
-    address 192.168.10.10
+    address 192.168.99.10
     netmask 255.255.255.0
-    gateway 192.168.10.20
+    gateway 192.168.99.20
